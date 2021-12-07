@@ -22,6 +22,7 @@ import { filter, map, mergeMap } from 'rxjs/operators';
 import {
   aspectCache,
   calculateNewPointCoordinate,
+  checkLngLat,
   parseFunction
 } from '@home/components/widget/lib/maps/common-maps-utils';
 import { WidgetContext } from '@home/models/widget-component.models';
@@ -220,6 +221,7 @@ export class ImageMap extends LeafletMap {
           zoom: 1,
           crs: L.CRS.Simple,
           attributionControl: false,
+          editable: !!this.options.editablePolygon,
           tap: L.Browser.safari && L.Browser.mobile
         });
         this.updateBounds(updateImage);
@@ -261,13 +263,7 @@ export class ImageMap extends LeafletMap {
         return L.CRS.Simple.latLngToPoint(latLng, maxZoom - 1);
     }
 
-    convertToCustomFormat(position: L.LatLng, offset = 0, width = this.width, height = this.height): {[key: string]: any} {
-      if (!position) {
-        return {
-          [this.options.xPosKeyName]: null,
-          [this.options.yPosKeyName]: null
-        };
-      }
+    convertToCustomFormat(position: L.LatLng, offset = 0, width = this.width, height = this.height): object {
       const point = this.latLngToPoint(position);
       const customX = calculateNewPointCoordinate(point.x, width);
       const customY = calculateNewPointCoordinate(point.y, height);
@@ -283,9 +279,13 @@ export class ImageMap extends LeafletMap {
         point.y = height;
       }
 
+      const customLatLng = checkLngLat(this.pointToLatLng(point.x, point.y), this.southWest, this.northEast, offset);
+
       return {
         [this.options.xPosKeyName]: customX,
-        [this.options.yPosKeyName]: customY
+        [this.options.yPosKeyName]: customY,
+        [this.options.latKeyName]: customLatLng.lat,
+        [this.options.lngKeyName]: customLatLng.lng
       };
     }
 
@@ -304,10 +304,9 @@ export class ImageMap extends LeafletMap {
       }
     }
 
-    convertPolygonToCustomFormat(expression: any[][]): {[key: string]: any} {
-      const coordinate = expression ? this.convertToPolygonFormat(expression) : null;
+    convertPolygonToCustomFormat(expression: any[][]): object {
       return {
-        [this.options.polygonKeyName]: coordinate
+        [this.options.polygonKeyName] : this.convertToPolygonFormat(expression)
       };
     }
 }

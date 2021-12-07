@@ -76,19 +76,19 @@ export class NavTreeComponent implements OnInit {
   }
 
   @Input()
-  loadNodes: LoadNodesCallback;
+  private loadNodes: LoadNodesCallback;
 
   @Input()
-  searchCallback: NodeSearchCallback;
+  private searchCallback: NodeSearchCallback;
 
   @Input()
-  onNodeSelected: NodeSelectedCallback;
+  private onNodeSelected: NodeSelectedCallback;
 
   @Input()
-  onNodesInserted: NodesInsertedCallback;
+  private onNodesInserted: NodesInsertedCallback;
 
   @Input()
-  editCallbacks: NavTreeEditCallbacks;
+  private editCallbacks: NavTreeEditCallbacks;
 
   private treeElement: JSTree;
 

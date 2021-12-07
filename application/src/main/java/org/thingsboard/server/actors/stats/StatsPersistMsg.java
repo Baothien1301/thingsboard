@@ -37,9 +37,4 @@ public final class StatsPersistMsg implements TbActorMsg {
     public MsgType getMsgType() {
         return MsgType.STATS_PERSIST_MSG;
     }
-
-    public boolean isEmpty() {
-        return messagesProcessed == 0 && errorsOccurred == 0;
-    }
-
 }

@@ -3,18 +3,15 @@
   "compilerOptions": {
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
     "declaration": false,
-    "downlevelIteration": true,
-    "experimentalDecorators": true,
-    "moduleResolution": "node",
-    "importHelpers": true,
-    "target": "es2017",
     "module": "es2020",
+    "moduleResolution": "node",
     "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
+    "importHelpers": true,
+    "target": "es5",
     "jsx": "react",
     "typeRoots": [
       "node_modules/@types",
@@ -23,7 +20,7 @@
       "src/typings/jquery.flot.typings.d.ts",
       "src/typings/jquery.jstree.typings.d.ts",
       "src/typings/split.js.typings.d.ts",
-      "src/typings/leaflet-geoman-extend.d.ts"
+      "src/typings/add-marker.d.ts"
     ],
     "paths": {
       "@app/*": ["src/app/*"],
@@ -54,14 +51,9 @@
       ]
     },
     "lib": [
-      "es2020",
+      "es2018",
+      "es2019",
       "dom"
     ]
-  },
-  "angularCompilerOptions": {
-    "enableI18nLegacyMessageIdFormat": false,
-    "strictInjectionParameters": true,
-    "strictInputAccessModifiers": true,
-    "strictTemplates": false
   }
 }

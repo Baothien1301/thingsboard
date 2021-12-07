@@ -15,7 +15,6 @@
 ///
 
 import { InjectionToken } from '@angular/core';
-import { IModulesMap } from '@modules/common/modules-map.models';
 
 export const Constants = {
   serverErrorCode: {
@@ -245,4 +244,4 @@ export const contentTypesMap = new Map<ContentType, ContentTypeData>(
 export const customTranslationsPrefix = 'custom.';
 export const i18nPrefix = 'i18n';
 
-export const MODULES_MAP = new InjectionToken<IModulesMap>('ModulesMap');
+export const MODULES_MAP = new InjectionToken<{[key: string]: any}>('ModulesMap');

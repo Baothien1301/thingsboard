@@ -14,8 +14,7 @@
 /// limitations under the License.
 ///
 
-// @ts-ignore
-import L, { PolylineDecorator, PolylineDecoratorOptions, Symbol } from 'leaflet';
+import L, { PolylineDecoratorOptions } from 'leaflet';
 import 'leaflet-polylinedecorator';
 
 import { FormattedData, PolylineSettings } from './map-models';
@@ -24,7 +23,7 @@ import { functionValueCalculator } from '@home/components/widget/lib/maps/common
 export class Polyline {
 
   leafletPoly: L.Polyline;
-  polylineDecorator: PolylineDecorator;
+  polylineDecorator: L.PolylineDecorator;
   dataSources: FormattedData[];
   data: FormattedData;
 
@@ -37,7 +36,7 @@ export class Polyline {
     ).addTo(this.map);
 
     if (settings.usePolylineDecorator) {
-      this.polylineDecorator = new PolylineDecorator(this.leafletPoly, this.getDecoratorSettings(settings)).addTo(this.map);
+      this.polylineDecorator = L.polylineDecorator(this.leafletPoly, this.getDecoratorSettings(settings)).addTo(this.map);
     }
   }
 
@@ -48,7 +47,7 @@ export class Polyline {
           offset: settings.decoratorOffset,
           endOffset: settings.endDecoratorOffset,
           repeat: settings.decoratorRepeat,
-          symbol: Symbol[settings.decoratorSymbol]({
+          symbol: L.Symbol[settings.decoratorSymbol]({
             pixelSize: settings.decoratorSymbolSize,
             polygon: false,
             pathOptions: {
@@ -79,8 +78,7 @@ export class Polyline {
       opacity: functionValueCalculator(settings.useStrokeOpacityFunction, settings.strokeOpacityFunction,
         [this.data, this.dataSources, this.data.dsIndex], settings.strokeOpacity),
       weight: functionValueCalculator(settings.useStrokeWeightFunction, settings.strokeWeightFunction,
-        [this.data, this.dataSources, this.data.dsIndex], settings.strokeWeight),
-      pmIgnore: true
+        [this.data, this.dataSources, this.data.dsIndex], settings.strokeWeight)
     };
   }
 

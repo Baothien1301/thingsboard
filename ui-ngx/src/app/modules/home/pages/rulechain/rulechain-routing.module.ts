@@ -41,7 +41,6 @@ import { RuleNodeComponentDescriptor } from '@shared/models/rule-node.models';
 import { ConfirmOnExitGuard } from '@core/guards/confirm-on-exit.guard';
 import { ItemBufferService } from '@core/public-api';
 import { MODULES_MAP } from '@shared/public-api';
-import { IModulesMap } from '@modules/common/modules-map.models';
 
 @Injectable()
 export class RuleChainResolver implements Resolve<RuleChain> {
@@ -71,7 +70,7 @@ export class ResolvedRuleChainMetaDataResolver implements Resolve<ResolvedRuleCh
 export class RuleNodeComponentsResolver implements Resolve<Array<RuleNodeComponentDescriptor>> {
 
   constructor(private ruleChainService: RuleChainService,
-              @Optional() @Inject(MODULES_MAP) private modulesMap: IModulesMap) {
+              @Optional() @Inject(MODULES_MAP) private modulesMap: {[key: string]: any}) {
   }
 
   resolve(route: ActivatedRouteSnapshot): Observable<Array<RuleNodeComponentDescriptor>> {

@@ -14,23 +14,18 @@
 /// limitations under the License.
 ///
 
-import { NgModule } from '@angular/core';
-import { PowerModeSettingComponent } from './power-mode-setting.component';
-import { SharedModule } from '@shared/shared.module';
-import { CommonModule } from '@angular/common';
-import { TimeUnitSelectComponent } from './time-unit-select.component';
+import * as L from 'leaflet';
 
-@NgModule({
-  declarations: [
-    PowerModeSettingComponent,
-    TimeUnitSelectComponent
-  ],
-  imports: [
-    CommonModule,
-    SharedModule
-  ],
-  exports: [
-    PowerModeSettingComponent
-  ]
-})
-export class DeviceProfileCommonModule { }
+declare module 'leaflet' {
+
+    namespace Control {
+        class AddMarker extends L.Control { }
+        class AddPolygon extends L.Control { }
+    }
+
+    namespace control {
+        function addMarker(options): Control.AddMarker;
+        function addPolygon(options): Control.AddPolygon;
+    }
+
+}

@@ -42,7 +42,6 @@ import org.thingsboard.server.gen.transport.TransportProtos.TbSubscriptionCloseP
 import org.thingsboard.server.gen.transport.TransportProtos.TbSubscriptionKetStateProto;
 import org.thingsboard.server.gen.transport.TransportProtos.TbSubscriptionProto;
 import org.thingsboard.server.gen.transport.TransportProtos.TbSubscriptionUpdateProto;
-import org.thingsboard.server.gen.transport.TransportProtos.TbSubscriptionUpdateTsValue;
 import org.thingsboard.server.gen.transport.TransportProtos.TbTimeSeriesSubscriptionProto;
 import org.thingsboard.server.gen.transport.TransportProtos.TbTimeSeriesUpdateProto;
 import org.thingsboard.server.gen.transport.TransportProtos.ToCoreMsg;
@@ -172,11 +171,10 @@ public class TbSubscriptionUtils {
             Map<String, List<Object>> data = new TreeMap<>();
             proto.getDataList().forEach(v -> {
                 List<Object> values = data.computeIfAbsent(v.getKey(), k -> new ArrayList<>());
-                for (int i = 0; i < v.getTsValueCount(); i++) {
+                for (int i = 0; i < v.getTsCount(); i++) {
                     Object[] value = new Object[2];
-                    TbSubscriptionUpdateTsValue tsValue = v.getTsValue(i);
-                    value[0] = tsValue.getTs();
-                    value[1] = tsValue.hasValue() ? tsValue.getValue() : null;
+                    value[0] = v.getTs(i);
+                    value[1] = v.getValue(i);
                     values.add(value);
                 }
             });

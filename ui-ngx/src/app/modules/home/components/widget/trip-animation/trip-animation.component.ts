@@ -100,10 +100,7 @@ export class TripAnimationComponent implements OnInit, AfterViewInit, OnDestroy 
     addGroupInfo(schema, 'Path Settings');
     addToSchema(schema, addCondition(pointSchema, 'model.showPoints === true', ['showPoints']));
     addGroupInfo(schema, 'Path Points Settings');
-    const mapPolygonSchemaWithoutEdit = mapPolygonSchema;
-    delete mapPolygonSchemaWithoutEdit.schema.properties.editablePolygon;
-    mapPolygonSchemaWithoutEdit.form.splice(mapPolygonSchemaWithoutEdit.form.indexOf('editablePolygon'), 1);
-    addToSchema(schema, addCondition(mapPolygonSchemaWithoutEdit, 'model.showPolygon === true', ['showPolygon']));
+    addToSchema(schema, addCondition(mapPolygonSchema, 'model.showPolygon === true', ['showPolygon']));
     addGroupInfo(schema, 'Polygon Settings');
     return schema;
   }
@@ -118,7 +115,6 @@ export class TripAnimationComponent implements OnInit, AfterViewInit, OnDestroy 
       rotationAngle: 0
     };
     this.settings = { ...settings, ...this.ctx.settings };
-    this.settings.editablePolygon = false;
     this.useAnchors = this.settings.showPoints && this.settings.usePointAsAnchor;
     this.settings.pointAsAnchorFunction = parseFunction(this.settings.pointAsAnchorFunction, ['data', 'dsData', 'dsIndex']);
     this.settings.tooltipFunction = parseFunction(this.settings.tooltipFunction, ['data', 'dsData', 'dsIndex']);

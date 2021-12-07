@@ -51,9 +51,6 @@ public class StatsActor extends ContextAwareActor {
     }
 
     public void onStatsPersistMsg(StatsPersistMsg msg) {
-        if (msg.isEmpty()) {
-            return;
-        }
         Event event = new Event();
         event.setEntityId(msg.getEntityId());
         event.setTenantId(msg.getTenantId());

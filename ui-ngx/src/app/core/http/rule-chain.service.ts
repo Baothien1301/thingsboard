@@ -45,7 +45,6 @@ import { EntityType } from '@shared/models/entity-type.models';
 import { deepClone, snakeCase } from '@core/utils';
 import { DebugRuleNodeEventBody } from '@app/shared/models/event.models';
 import { Edge } from '@shared/models/edge.models';
-import { IModulesMap } from '@modules/common/modules-map.models';
 
 @Injectable({
   providedIn: 'root'
@@ -120,14 +119,14 @@ export class RuleChainService {
     );
   }
 
-  public getRuleNodeComponents(modulesMap: IModulesMap, ruleChainType: RuleChainType, config?: RequestConfig):
+  public getRuleNodeComponents(ruleNodeConfigResourcesModulesMap: {[key: string]: any}, ruleChainType: RuleChainType, config?: RequestConfig):
     Observable<Array<RuleNodeComponentDescriptor>> {
      if (this.ruleNodeComponentsMap.get(ruleChainType)) {
        return of(this.ruleNodeComponentsMap.get(ruleChainType));
      } else {
       return this.loadRuleNodeComponents(ruleChainType, config).pipe(
         mergeMap((components) => {
-          return this.resolveRuleNodeComponentsUiResources(components, modulesMap).pipe(
+          return this.resolveRuleNodeComponentsUiResources(components, ruleNodeConfigResourcesModulesMap).pipe(
             map((ruleNodeComponents) => {
               this.ruleNodeComponentsMap.set(ruleChainType, ruleNodeComponents);
               this.ruleNodeComponentsMap.get(ruleChainType).push(ruleChainNodeComponent);
@@ -221,11 +220,11 @@ export class RuleChainService {
   }
 
   private resolveRuleNodeComponentsUiResources(components: Array<RuleNodeComponentDescriptor>,
-                                               modulesMap: IModulesMap):
+                                               ruleNodeConfigResourcesModulesMap: {[key: string]: any}):
     Observable<Array<RuleNodeComponentDescriptor>> {
     const tasks: Observable<RuleNodeComponentDescriptor>[] = [];
     components.forEach((component) => {
-      tasks.push(this.resolveRuleNodeComponentUiResources(component, modulesMap));
+      tasks.push(this.resolveRuleNodeComponentUiResources(component, ruleNodeConfigResourcesModulesMap));
     });
     return forkJoin(tasks).pipe(
       catchError((err) => {
@@ -235,7 +234,7 @@ export class RuleChainService {
   }
 
   private resolveRuleNodeComponentUiResources(component: RuleNodeComponentDescriptor,
-                                              modulesMap: IModulesMap):
+                                              ruleNodeConfigResourcesModulesMap: {[key: string]: any}):
     Observable<RuleNodeComponentDescriptor> {
     const nodeDefinition = component.configurationDescriptor.nodeDefinition;
     const uiResources = nodeDefinition.uiResources;
@@ -249,7 +248,7 @@ export class RuleChainService {
         });
       }
       if (moduleResource) {
-        tasks.push(this.resourcesService.loadFactories(moduleResource, modulesMap).pipe(
+        tasks.push(this.resourcesService.loadFactories(moduleResource, ruleNodeConfigResourcesModulesMap).pipe(
           map((res) => {
             if (nodeDefinition.configDirective && nodeDefinition.configDirective.length) {
               const selector = snakeCase(nodeDefinition.configDirective, '-');

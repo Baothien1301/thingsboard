@@ -14,21 +14,21 @@
 /// limitations under the License.
 ///
 
-import { Inject, Injectable, Type } from '@angular/core';
+import { Injectable, NgModule } from '@angular/core';
 import { Observable } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from '@core/auth/auth.service';
 import { DynamicComponentFactoryService } from '@core/services/dynamic-component-factory.service';
 import { CommonModule } from '@angular/common';
+import { SharedModule } from '@shared/shared.module';
 import { mergeMap, tap } from 'rxjs/operators';
 import { CustomDialogComponent } from './custom-dialog.component';
 import {
   CustomDialogContainerComponent,
   CustomDialogContainerData
 } from '@home/components/widget/dialog/custom-dialog-container.component';
-import { SHARED_MODULE_TOKEN } from '@shared/components/tokens';
-import { SHARED_HOME_COMPONENTS_MODULE_TOKEN } from '@home/components/tokens';
+import { SharedHomeComponentsModule } from '@home/components/shared-home-components.module';
 
 @Injectable()
 export class CustomDialogService {
@@ -37,8 +37,6 @@ export class CustomDialogService {
     private translate: TranslateService,
     private authService: AuthService,
     private dynamicComponentFactoryService: DynamicComponentFactoryService,
-    @Inject(SHARED_MODULE_TOKEN) private sharedModule: Type<any>,
-    @Inject(SHARED_HOME_COMPONENTS_MODULE_TOKEN) private sharedHomeComponentsModule: Type<any>,
     public dialog: MatDialog
   ) {
   }
@@ -47,7 +45,7 @@ export class CustomDialogService {
     return this.dynamicComponentFactoryService.createDynamicComponentFactory(
       class CustomDialogComponentInstance extends CustomDialogComponent {},
       template,
-      [this.sharedModule, CommonModule, this.sharedHomeComponentsModule]).pipe(
+      [SharedModule, CustomDialogModule, SharedHomeComponentsModule]).pipe(
       mergeMap((factory) => {
           const dialogData: CustomDialogContainerData = {
             controller,
@@ -71,3 +69,15 @@ export class CustomDialogService {
 
 }
 
+@NgModule({
+  declarations:
+    [
+    ],
+  imports: [
+    CommonModule,
+    SharedModule
+  ],
+  exports: [
+  ]
+})
+class CustomDialogModule { }

@@ -125,7 +125,7 @@ public class DefaultTbApiUsageClient implements TbApiUsageClient {
         }));
 
         if (!report.isEmpty()) {
-            log.debug("Reporting API usage statistics for {} tenants and customers", report.size());
+            log.info("Reporting API usage statistics for {} tenants and customers", report.size());
         }
     }
 
